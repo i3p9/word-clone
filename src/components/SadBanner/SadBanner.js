@@ -1,7 +1,7 @@
 import React from 'react';
 
-function SadBanner({answer, handleRestart}) {
-  function handleRestartButton(){
+function SadBanner({ answer, handleRestart }) {
+  function handleRestartButton() {
     handleRestart();
   }
 

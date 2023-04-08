@@ -7,6 +7,8 @@ import GuessResult from '../GuessResult/GuessResult';
 import { NUM_OF_GUESSES_ALLOWED } from '../../constants';
 import HappyBanner from '../HappyBanner/HappyBanner';
 import SadBanner from '../SadBanner/SadBanner';
+import Keyboard from '../Keyboard/Keyboard';
+import { checkGuess } from '../../game-helpers';
 
 // Pick a random word on every pageload.
 //const answer = sample(WORDS);
@@ -15,11 +17,12 @@ import SadBanner from '../SadBanner/SadBanner';
 //console.info({ answer });
 
 function Game() {
-  const [answer,setAnswer] = React.useState(sample(WORDS));
+  const [answer, setAnswer] = React.useState(sample(WORDS));
 
   const [allGuesses, setAllGuesses] = React.useState([]);
   const [gameStatus, setGameStatus] = React.useState('running');
   const [numOfWinningGuess, setNumOfWinningGuess] = React.useState(0);
+  const [guessStatus, setGuessStatus] = React.useState([]);
 
   function handleGuessInput(word) {
     if (allGuesses.length === NUM_OF_GUESSES_ALLOWED) {
@@ -29,7 +32,6 @@ function Game() {
       setAllGuesses(nextGuesses);
 
       if (word === answer) {
-        console.log(`won: ${nextGuesses.length}`);
         setNumOfWinningGuess(nextGuesses.length);
         setGameStatus('won');
 
@@ -37,6 +39,10 @@ function Game() {
         setGameStatus('lost');
       }
     }
+
+    //setting guessStatus array for keyboard key colors
+    const guessResult = checkGuess(word, answer);
+    setGuessStatus((prev) => [...prev, ...guessResult]);
   }
 
   function handleRestart() {
@@ -54,6 +60,7 @@ function Game() {
       handleGuessInput={handleGuessInput}
       gameStatus={gameStatus}
     >Enter guess: </GuessInput>
+    <Keyboard guessStatus={guessStatus} />
     {(gameStatus === 'won') ? <HappyBanner numOfGuesses={numOfWinningGuess} handleRestart={handleRestart} /> : ""}
     {(gameStatus === 'lost') ? <SadBanner answer={answer} handleRestart={handleRestart} /> : ""}
   </>;
