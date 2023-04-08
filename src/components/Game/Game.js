@@ -49,6 +49,7 @@ function Game() {
     setAllGuesses([]);
     setGameStatus('running');
     setAnswer(sample(WORDS));
+    setGuessStatus([]);
   }
 
   return <>
